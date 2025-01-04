@@ -102,19 +102,19 @@ echo \'Hello Staging-Deploy\''''
                  from: "as.gmstcl@gmail.com",
                  to: "as.gmstcl@gmail.com",
                  body: '''<a href="${BUILD_URL}input">Please check this approval request.</a>
-                          <img src="https://image.fmkorea.com/files/attach/new3/20230629/14339012/770863625/5916893416/6f736479948b0c9424a6adaf9bab41d2.png" alt="test">'''
+                          <img src="https://image.fmkorea.com/files/attach/new3/20230629/14339012/770863625/5916893416/6f736479948b0c9424a6adaf9bab41d2.png" alt="Clid">'''
                 
                 script {
                     def userInput = input id: 'userInput',
                                         message: 'Deploy to production?', 
                                         submitterParameter: 'submitter',
                                         submitter: 'admin',
-                                        parameters: [
-                                            [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
-                                            [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
-                                        ]
-                    echo ("Env: "+userInput['tag'])
-                    echo ("Target: "+userInput['FOO'])
+                    //                     parameters: [
+                    //                         [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
+                    //                         [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
+                    //                     ]
+                    // echo ("Env: "+userInput['tag'])
+                    // echo ("Target: "+userInput['FOO'])
                     echo ("submitted by: "+userInput['submitter'])
                 }
       }
