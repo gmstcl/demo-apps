@@ -61,8 +61,13 @@ git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gms
 gh auth setup-git
           """
         }
+        withCredentials([string(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', variable: 'GH_TOKEN')]) {
+          sh """
+echo $GH_TOKEN | gh auth locagin --with-token
+          """
+        }
         sh '''#!/bin/bash
-gh auth status gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
+gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
 rm -rf *.tgz
 git add -A
 git commit -m "$VERSION"
