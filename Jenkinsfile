@@ -108,7 +108,7 @@ echo \'Hello Staging-Deploy\''''
                     def userInput = input id: 'userInput',
                                         message: 'Deploy to production?', 
                                         submitterParameter: 'submitter',
-                                        submitter: 'admin',
+                                        submitter: 'admin'
                     //                     parameters: [
                     //                         [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
                     //                         [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
@@ -119,7 +119,6 @@ echo \'Hello Staging-Deploy\''''
                 }
       }
     }
-
   }
   environment {
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
