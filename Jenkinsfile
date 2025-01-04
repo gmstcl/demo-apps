@@ -105,7 +105,7 @@ echo \'Hello Staging-Deploy\''''
                           <img src="https://image.fmkorea.com/files/attach/new3/20230629/14339012/770863625/5916893416/6f736479948b0c9424a6adaf9bab41d2.png" alt="Clid">'''
                 
                 script {
-                    def userInput = input //id: 'userInput',
+                    def userInput = input id: 'userInput',
                                         message: 'Deploy to production?', 
                                         submitterParameter: 'submitter',
                                         submitter: 'admin',
