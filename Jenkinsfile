@@ -63,7 +63,7 @@ echo $GIT_PASSWORD | gh auth login --with-token
         }
 
         sh '''
-NAME=$(gh release view v$VERSION --json assets --jq '.assets[].name' || echo 000)
+NAME=$(gh release view v$VERSION --json assets --jq '.assets[].name' || echo none)
 isFrontend=$(echo $NAME | grep frontend | wc -l)
 isBackend=$(echo $NAME | grep backend | wc -l)
 
