@@ -92,8 +92,29 @@ rm -rf .*'''
       steps {
         sh '''#!/bin/bash
 echo \'Hello Staging-Deploy\''''
-        sh '''#!/bin/bash
-echo hello staging-deploy'''
+      }
+    }
+
+    stage('Approval') {
+      steps {
+        emailext mimeType: 'text/html',
+                 subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName}",
+                 to: "as.gmstcl@gmail.com",
+                 body: '''<a href="${BUILD_URL}input">Please check this approval request.</a>'''
+                
+                script {
+                    def userInput = input id: 'userInput',
+                                        message: 'Deploy to production?', 
+                                        submitterParameter: 'submitter',
+                                        submitter: 'admin',
+                                        parameters: [
+                                            [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
+                                            [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
+                                        ]
+                    echo ("Env: "+userInput['tag'])
+                    echo ("Target: "+userInput['FOO'])
+                    echo ("submitted by: "+userInput['submitter'])
+                }
       }
     }
 
