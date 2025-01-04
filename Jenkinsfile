@@ -13,7 +13,7 @@ aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS
         sh '''#!/bin/bash
 chmod +x ./gradlew
 ./gradlew build
-docker build -t 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'''
+docker build -t 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0 .'''
       }
     }
 
