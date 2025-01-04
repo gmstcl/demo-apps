@@ -56,11 +56,27 @@ git config user.name "gmstcl"
 git config user.email "as.gmstcl@gmail.com"
         '''
         withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-          sh """
+          sh '''
 git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
 echo $GIT_PASSWORD | gh auth login --with-token
-          """
+          '''
         }
+
+        sh '''
+NAME=$(gh release view v$VERSION --json assets --jq '.assets[].name')
+isFrontend=$(echo $NAME | grep frontend | wc -l)
+isBackend=$(echo $NAME | grep backend | wc -l)
+
+if [ $isBackend -eq 0 ]  && [ $isFrontend -eq 1 ]; then
+  gh release upload v$VERSION backend-skills-repo-$VERSION.tgz
+elif [ $isBackend -eq 1 ] && [ $isFrontend -eq 0 ]; then 
+  echo "Only Backend"
+elif [ $isBackend -eq 0 ] && [ $isFrontend -eq 0 ]; then
+  gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
+elif [ $isBackend -eq 1 ] && [ $isFrontend -eq 1 ]; then
+  echo "Failed"
+fi
+        '''
         //withCredentials([string(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', variable: 'GH_TOKEN')]) {
 //           withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
 //           sh """
