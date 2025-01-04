@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  tools {
-      nodejs 'nodejs'
-  }
   stages {
     stage('Pre-Build') {
       steps {
