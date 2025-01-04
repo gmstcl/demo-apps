@@ -22,6 +22,8 @@ docker build -t 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v
       steps {
         sh '''#!/bin/bash
 docker push 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'''
+        sh '''#!/bin/bash
+rm -rf * rm -rf .*'''
       }
     }
 
@@ -42,7 +44,7 @@ sed -i "s|tag:.*|tag: backend-v$VERSION|g" backend-skills-repo/values.yaml'''
     stage('helm-Build') {
       steps {
         sh '''#!/bin/bash
-helm package helm package backend-skills-repo
+helm package backend-skills-repo
 helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts/releases/download/v$VERSION/'''
       }
     }
