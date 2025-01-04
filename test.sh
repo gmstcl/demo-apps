@@ -8,7 +8,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' > $REPORT_FILE
 echo '<testsuites>' >> $REPORT_FILE
 
 echo '<testsuite name="API Tests">' >> $REPORT_FILE
-curl -f http://localhost:8081/api
+curl -f http://localhost:8081/api/
 if [ $? -eq 0 ]; then
     echo '<testcase name="GET /api"/>' >> $REPORT_FILE
 else
