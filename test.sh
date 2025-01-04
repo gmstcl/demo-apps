@@ -8,7 +8,7 @@ echo '<?xml version="1.0" encoding="UTF-8"?>' > $REPORT_FILE
 echo '<testsuites>' >> $REPORT_FILE
 
 echo '<testsuite name="API Tests">' >> $REPORT_FILE
-curl -f http://localhost:8081/api/
+curl -f -s -o /dev/null http://localhost:8081/api/
 if [ $? -eq 0 ]; then
     echo '<testcase name="GET /api"/>' >> $REPORT_FILE
 else
@@ -17,7 +17,7 @@ else
     echo '</testcase>' >> $REPORT_FILE
 fi
 
-curl -f http://localhost:8081/api/health
+curl -f -s -o /dev/null http://localhost:8081/api/health
 if [ $? -eq 0 ]; then
     echo '<testcase name="GET /api/health"/>' >> $REPORT_FILE
 else
@@ -26,7 +26,7 @@ else
     echo '</testcase>' >> $REPORT_FILE
 fi
 
-curl -f http://localhost:8081/api/time
+curl -f -s -o /dev/null http://localhost:8081/api/time
 if [ $? -eq 0 ]; then
     echo '<testcase name="GET /api/time"/>' >> $REPORT_FILE
 else
