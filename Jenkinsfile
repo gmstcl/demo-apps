@@ -1,10 +1,14 @@
 pipeline {
   agent any
+  environment {
+     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
+  }
   stages {
     stage('Pre-Build') {
       steps {
         sh '''#!/bin/bash
-aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com'''
+aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com
+echo $VERSION'''
       }
     }
 
