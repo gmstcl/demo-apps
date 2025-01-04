@@ -38,9 +38,20 @@ rm -rf * rm -rf .*'''
 
     stage('Test') { 
         steps {
-            sh 'npm install'
-            sh 'npm test'
+            sh 'docker run -d --name demo-backend -p 8080:8080 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'
+
+            script {
+                def container_id = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
+                env.CONTAINER_ID = container_id
+            }
+
+            sh 'chmod +x test.sh'
+            sh './test.sh'
+
             junit 'reports/test-results.xml'
+
+            sh 'docker stop $CONTAINER_ID'
+            sh 'docker rm $CONTAINER_ID'
         }
     }
     
