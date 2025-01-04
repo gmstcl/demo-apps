@@ -27,6 +27,15 @@ rm -rf * rm -rf .*'''
       }
     }
 
+    stages {
+        stage('Test') { 
+            steps {
+                sh 'npm test'
+                junit 'reports/test-results.xml'
+            }
+        }
+    }
+    
     stage('Clone-helm-repo') {
       steps {
         git(url: 'https://github.com/gmstcl/demo-charts', branch: 'main', credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f')
