@@ -55,7 +55,7 @@ helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts
 git config user.name "gmstcl"
 git config user.email "as.gmstcl@gmail.com"
         '''
-        withCredentials([usernamepassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
           sh """
 git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
           """
