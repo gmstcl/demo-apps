@@ -41,7 +41,7 @@ rm -rf * rm -rf .*'''
             //    def container_id = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
             //    env.CONTAINER_ID = container_id
             //}
-
+            sh 'sleep 5'
             sh 'chmod +x test.sh'
             sh './test.sh'
 
@@ -160,4 +160,3 @@ kubectl get pods -n skills'''
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
   } 
  }
- 
