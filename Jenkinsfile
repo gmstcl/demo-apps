@@ -94,7 +94,7 @@ rm -rf .*'''
 aws eks update-kubeconfig --name skills-staging-cluster
 helm repo add demo-backend-charts https://gmstcl.github.io/demo-charts/
 helm repo update
-helm install skills-backend --set Values.version=green --set image.repository=226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend --set image.tag=backend-v1.1.0 demo-backend-charts/backend-skills-repo -n skills
+helm install skills-backend --set Values.version=green --set image.repository=226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend --set image.tag=v1.1.0 demo-backend-charts/backend-skills-repo -n skills
 sleep 20 
 kubectl get pods -n skills''' 
         script {
@@ -134,4 +134,3 @@ kubectl get pods -n skills'''
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
   } 
  }
- 
