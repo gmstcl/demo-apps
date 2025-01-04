@@ -101,10 +101,10 @@ kubectl get pods -n skills'''
             def statusCode = sh(script: "kubectl exec deployment/backend -n ws -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
             if (statusCode != "200") {
               error "Health check failed with status code: ${statusCode}"
-       }
+        }
+        }
       }
     }
-
     stage('Approval') {
       steps {
         emailext mimeType: 'text/html',
