@@ -36,12 +36,10 @@ docker push 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.
 
     stage('helm-Build') {
       steps {
-        sh '''#!/bin/bash 
-ls -al
+        sh '''#!/bin/bash
 sed -i "s|version:.*|version: $VERSION|g" backend-skills-repo/Chart.yaml
 sed -i "s|tag:.*|tag: backend-v$VERSION|g" backend-skills-repo/values.yaml'''
       }
     }
-
   }
 }
