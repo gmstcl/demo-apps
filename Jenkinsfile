@@ -160,3 +160,4 @@ kubectl get pods -n skills'''
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
   } 
  }
+ 
