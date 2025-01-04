@@ -22,7 +22,7 @@ public class SkillsBackendApplication {
         SpringApplication.run(SkillsBackendApplication.class, args);
     }
 
-    @GetMapping("/api/h")
+    @GetMapping("/api")
     public ResponseEntity<String> index() {
         String text = "Hello, World!";
 
@@ -31,7 +31,7 @@ public class SkillsBackendApplication {
         return new ResponseEntity<>(text, HttpStatus.OK);
     }
 
-    @GetMapping("/api/time/h")
+    @GetMapping("/api/time")
     public ResponseEntity<Map<String, Object>> time() {
         Map<String, Object> data = new HashMap<>();
 
@@ -44,7 +44,7 @@ public class SkillsBackendApplication {
         return new ResponseEntity<>(data, HttpStatus.OK);
     }
 
-    @GetMapping("/api/health/h")
+    @GetMapping("/api/health")
     public ResponseEntity<Map<String, Object>> health() {
         Map<String, Object> data = new HashMap<>();
         data.put("status", "OK");
