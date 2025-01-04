@@ -55,7 +55,7 @@ helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts
 gh auth setup-git
 gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
 rm -rf *.tgz
-git pull origin main git add -A
+git add -A
 git commit -m "$VERSION"
 git push origin  main'''
       }
