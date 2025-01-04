@@ -55,7 +55,7 @@ helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts
 git config user.name "gmstcl"
 git config user.email "as.gmstcl@gmail.com"
         '''
-        withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        withCredentials(bindings: [usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
           sh '''
 git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
 echo $GIT_PASSWORD | gh auth login --with-token
@@ -63,7 +63,7 @@ echo $GIT_PASSWORD | gh auth login --with-token
         }
 
         sh '''
-NAME=$(gh release view v$VERSION --json assets --jq '.assets[].name' || echo none)
+NAME=$(gh release view v$VERSION --json assets --jq \'.assets[].name\' || echo none)
 isFrontend=$(echo $NAME | grep frontend | wc -l)
 isBackend=$(echo $NAME | grep backend | wc -l)
 
@@ -77,12 +77,6 @@ elif [ $isBackend -eq 1 ] && [ $isFrontend -eq 1 ]; then
   echo "Failed"
 fi
         '''
-        //withCredentials([string(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', variable: 'GH_TOKEN')]) {
-//           withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-//           sh """
-// echo $GIT_PASSWORD | gh auth login --with-token
-//           """
-//         }
         sh '''#!/bin/bash
 gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
 rm -rf *.tgz
@@ -91,6 +85,15 @@ git commit -m "$VERSION"
 git push origin  main
 rm -rf *
 rm -rf .*'''
+      }
+    }
+
+    stage('Staging-Deploy') {
+      steps {
+        sh '''#!/bin/bash
+echo \'Hello Staging-Deploy\''''
+        sh '''#!/bin/bash
+echo hello staging-deploy'''
       }
     }
 
