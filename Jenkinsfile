@@ -91,7 +91,18 @@ rm -rf .*'''
     stage('Staging-Deploy') {
       steps {
         sh '''#!/bin/bash
-echo \'Hello Staging-Deploy\''''
+aws eks update-kubeconfig --name skills-staging-cluster
+helm repo add https://gmstcl.github.io/demo-charts/
+helm repo update
+helm install skills-backend --set Values.version=green --set image.repository=226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend --set image.tag=backend-v1.1.0 demo-charts/backend-skills-repo -n skills
+sleep 20 
+kubectl get pods -n skills
+''' 
+       script {
+        def statusCode = sh(script: "kubectl exec deployment/backend -n ws -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
+        if (statusCode != "200") {
+          error "Health check failed with status code: ${statusCode}"
+       }
       }
     }
 
@@ -122,5 +133,6 @@ echo \'Hello Staging-Deploy\''''
   }
   environment {
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
-  }
+  } 
+ }
 }
