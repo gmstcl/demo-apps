@@ -35,7 +35,7 @@ rm -rf * rm -rf .*'''
 
     stage('Test') { 
         steps {
-            sh 'docker run -d -p 8081:8080 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'
+            sh 'docker run -d --name demo-backend -p 8081:8080 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'
 
             script {
                 def container_id = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
