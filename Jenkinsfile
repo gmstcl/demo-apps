@@ -98,9 +98,9 @@ helm install skills-backend --set Values.version=green --set image.repository=22
 sleep 20 
 kubectl get pods -n skills''' 
         script {
-          def statusCode = sh(script: "kubectl exec deployment/backend -n ws -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
-          if (statusCode != "200") {
-            error "Health check failed with status code: ${statusCode}"
+            def statusCode = sh(script: "kubectl exec deployment/backend -n ws -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
+            if (statusCode != "200") {
+              error "Health check failed with status code: ${statusCode}"
        }
       }
     }
