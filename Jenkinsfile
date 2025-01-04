@@ -1,8 +1,5 @@
 pipeline {
   agent any
-  environment {
-     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
-  }
   stages {
     stage('Pre-Build') {
       steps {
@@ -34,12 +31,36 @@ docker push 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.
       }
     }
 
-    stage('helm-Build') {
+    stage('helm-Pre-Build') {
       steps {
         sh '''#!/bin/bash
 sed -i "s|version:.*|version: $VERSION|g" backend-skills-repo/Chart.yaml
 sed -i "s|tag:.*|tag: backend-v$VERSION|g" backend-skills-repo/values.yaml'''
       }
     }
+
+    stage('helm-Build') {
+      steps {
+        sh '''#!/bin/bash
+helm package helm package backend-skills-repo
+helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts/releases/download/v$VERSION/'''
+      }
+    }
+
+    stage('helm-Post-Build') {
+      steps {
+        sh '''#!/bin/bash
+gh auth setup-git
+gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
+rm -rf *.tgz
+git add -A
+git commit -m "$VERSION"
+git push origin backend'''
+      }
+    }
+
+  }
+  environment {
+    VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
   }
 }
