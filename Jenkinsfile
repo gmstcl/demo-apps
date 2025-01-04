@@ -72,7 +72,9 @@ gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --gene
 rm -rf *.tgz
 git add -A
 git commit -m "$VERSION"
-git push origin  main'''
+git push origin  main
+rm -rf *
+rm -rf .*'''
       }
     }
 
