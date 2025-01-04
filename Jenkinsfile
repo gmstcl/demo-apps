@@ -98,7 +98,7 @@ echo \'Hello Staging-Deploy\''''
     stage('Approval') {
       steps {
         emailext mimeType: 'text/html',
-                 subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName} - ${VERSION}",
+                 subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName} - v${VERSION}",
                  from: "as.gmstcl@gmail.com",
                  to: "as.gmstcl@gmail.com",
                  body: '''<a href="${BUILD_URL}input">Please check this approval request.</a>
