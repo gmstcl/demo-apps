@@ -32,7 +32,7 @@ rm -rf * rm -rf .*'''
 
     stage('Test') { 
         steps {
-            sh 'npm -v'
+            sh 'npm install'
             sh 'npm test'
             junit 'reports/test-results.xml'
         }
