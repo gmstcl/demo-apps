@@ -30,6 +30,12 @@ rm -rf * rm -rf .*'''
       }
     }
 
+    stage('Checkout') {
+      steps {
+        git(url: 'https://github.com/gmstcl/demo-apps', branch: 'backend', credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f')
+      }
+    }
+
     stage('Test') { 
         steps {
             sh 'npm install'
