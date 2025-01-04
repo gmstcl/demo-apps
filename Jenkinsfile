@@ -27,12 +27,10 @@ rm -rf * rm -rf .*'''
       }
     }
 
-    stages {
-        stage('Test') { 
-            steps {
-                sh 'npm test'
-                junit 'reports/test-results.xml'
-            }
+    stage('Test') { 
+        steps {
+            sh 'npm test'
+            junit 'reports/test-results.xml'
         }
     }
     
