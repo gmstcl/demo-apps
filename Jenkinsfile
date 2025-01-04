@@ -29,7 +29,7 @@ rm -rf * rm -rf .*'''
 
     stage('Test') { 
         steps {
-            sh 'source /home/ec2-user/.bashrc'
+            sh 'npm -v'
             sh 'npm test'
             junit 'reports/test-results.xml'
         }
