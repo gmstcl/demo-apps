@@ -109,12 +109,12 @@ echo \'Hello Staging-Deploy\''''
                                         message: 'Deploy to production?', 
                                         submitterParameter: 'submitter',
                                         submitter: 'admin',
-                                        parameters: [
-                                            [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
-                                            [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
-                                        ]
-                    echo ("Env: "+userInput['tag'])
-                    echo ("Target: "+userInput['FOO'])
+                    //                     parameters: [
+                    //                         [$class: 'TextParameterDefinition', defaultValue: '1.0', description: 'Image Tag', name: 'tag'],
+                    //                         [$class: 'TextParameterDefinition', defaultValue: 'BAR', description: 'Environment', name: 'FOO']
+                    //                     ]
+                    // echo ("Env: "+userInput['tag'])
+                    // echo ("Target: "+userInput['FOO'])
                     echo ("submitted by: "+userInput['submitter'])
                 }
       }
