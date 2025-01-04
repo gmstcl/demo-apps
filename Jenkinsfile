@@ -51,21 +51,22 @@ helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts
 
     stage('helm-Post-Build') {
       steps {
-//         sh '''
-// git config user.name "gmstcl"
-// git config user.email "as.gmstcl@gmail.com"
-//         '''
-//         withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
-//           sh """
-// git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
-//           """
-//         }
-        //withCredentials([string(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', variable: 'GH_TOKEN')]) {
-          withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        sh '''
+git config user.name "gmstcl"
+git config user.email "as.gmstcl@gmail.com"
+        '''
+        withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
           sh """
+git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
 echo $GIT_PASSWORD | gh auth login --with-token
           """
         }
+        //withCredentials([string(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', variable: 'GH_TOKEN')]) {
+//           withCredentials([usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+//           sh """
+// echo $GIT_PASSWORD | gh auth login --with-token
+//           """
+//         }
         sh '''#!/bin/bash
 gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
 rm -rf *.tgz
