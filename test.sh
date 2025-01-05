@@ -7,6 +7,7 @@ REPORT_FILE="$REPORT_DIR/test-results.xml"
 echo '<?xml version="1.0" encoding="UTF-8"?>' > $REPORT_FILE
 echo '<testsuites>' >> $REPORT_FILE
 
+
 echo '<testsuite name="API Tests">' >> $REPORT_FILE
 curl -f http://localhost:8081/api/
 if [ $? -eq 0 ]; then
