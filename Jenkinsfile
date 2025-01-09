@@ -37,8 +37,7 @@ rm -rf * rm -rf .*'''
         git(url: 'https://github.com/gmstcl/demo-apps', branch: 'backend', credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130')
       }
     }
-
-<<<<<<< HEAD
+    
     stage('Test') { 
         steps {
             sh 'docker run -d --name demo-backend -p 8081:8080 ${AWS_REPOSITORY}:v$VERSION'
@@ -56,14 +55,13 @@ rm -rf * rm -rf .*'''
 
             sh 'docker stop $CONTAINER_ID'
             sh 'docker rm $CONTAINER_ID'
-=======
+
     stage('Test') {
       steps {
         sh 'docker run -d --name demo-backend -p 8081:8080 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'
         script {
           def container_id = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
           env.CONTAINER_ID = container_id
->>>>>>> origin/backend
         }
 
         sh 'sleep 5'
@@ -136,7 +134,6 @@ rm -rf .*'''
       }
     }
 
-<<<<<<< HEAD
     // stage('Staging-Deploy') {
       // steps {
         // sh '''#!/bin/bash
@@ -155,28 +152,7 @@ rm -rf .*'''
         // }
       // }
     // }
-=======
-    stage('Staging-Deploy') {
-      steps {
-        sh '''#!/bin/bash
-aws eks update-kubeconfig --name skills-staging-cluster
-helm repo add demo-backend-charts https://gmstcl.github.io/demo-charts/
-helm repo update
-helm uninstall skills-backend -n skills 
-helm install skills-backend --set Values.version=green --set image.repository=226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend --set image.tag=v1.1.0 demo-backend-charts/backend-skills-repo -n skills
-sleep 20 
-kubectl get pods -n skills'''
-        script {
-          def statusCode = sh(script: "kubectl exec deployment/backend-app -n skills -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
-          if (statusCode != "200") {
-            error "Health check failed with status code: ${statusCode}"
-          }
-        }
-
-      }
-    }
-
->>>>>>> origin/backend
+  
     stage('Approval') {
       steps {
         emailext(mimeType: 'text/html', subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName} - v${VERSION}", from: 'as.gmstcl@gmail.com', to: 'as.gmstcl@gmail.com', body: '''<a href="${BUILD_URL}input">Please check this approval request.</a>
