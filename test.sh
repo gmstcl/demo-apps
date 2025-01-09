@@ -18,7 +18,7 @@ else
     echo '</testcase>' >> $REPORT_FILE
 fi
 
-curl -f http://localhost:8081/api/health
+curl -f http://localhost:80/api/health
 if [ $? -eq 0 ]; then
     echo '<testcase name="GET /api/health"/>' >> $REPORT_FILE
 else
