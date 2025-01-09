@@ -172,3 +172,5 @@ rm -rf .*'''
     VERSION = sh(script: 'cat VERSION', returnStdout: true).trim()
   }
 }
+  }
+}
