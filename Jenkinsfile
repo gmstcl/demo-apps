@@ -42,17 +42,17 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/gmstcl/demo-apps', branch: 'backend', credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130'
+                git url: 'https://github.com/gmstcl/demo-apps', branch: 'frontend', credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130'
             }
         }
 
         stage('Test') {
             steps {
                 withEnv(["AWS_REPOSITORY=${env.FRONTEND_AWS_REPOSITORY}"]) {
-                sh 'docker run -d --name demo-backend -p 80:80 ${AWS_REPOSITORY}:v$VERSION'
+                sh 'docker run -d --name demo-frontend -p 80:80 ${AWS_REPOSITORY}:v$VERSION'
 
                 script {
-                    env.CONTAINER_ID = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
+                    env.CONTAINER_ID = sh(script: 'docker ps -q -f name=demo-frontend', returnStdout: true).trim()
                 }
 
                 sh '''
