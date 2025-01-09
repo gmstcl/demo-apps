@@ -23,8 +23,6 @@ pipeline {
             steps {
                 withEnv(["AWS_REPOSITORY=${env.FRONTEND_AWS_REPOSITORY}"]) {
                 sh '''
-                chmod +x ./gradlew
-                ./gradlew build
                 docker build -t ${AWS_REPOSITORY}:v$VERSION .
                 '''
                 }
