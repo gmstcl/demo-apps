@@ -3,8 +3,13 @@ pipeline {
   stages {
     stage('Pre-Build') {
       steps {
+        withEnv([
+          "AWS_DEFAULT_REGION=${env.AWS_DEFAULT_REGION}",
+          "AWS_ACCOUNT=${env.AWS_ACCOUNT}",
+          "AWS_REPOSITORY=${env.BACKEND_AWS_REPOSITORY}"
+        ])
         sh '''#!/bin/bash
-aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com
+aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
 echo $VERSION'''
       }
     }
@@ -14,14 +19,14 @@ echo $VERSION'''
         sh '''#!/bin/bash
 chmod +x ./gradlew
 ./gradlew build
-docker build -t 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0 .'''
+docker build -t ${AWS_REPOSITORY}:v$VERSION .'''
       }
     }
 
     stage('Post-Build') {
       steps {
         sh '''#!/bin/bash
-docker push 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'''
+docker push ${AWS_REPOSITORY}:v$VERSION'''
         sh '''#!/bin/bash
 rm -rf * rm -rf .*'''
       }
@@ -29,13 +34,13 @@ rm -rf * rm -rf .*'''
 
     stage('Checkout') {
       steps {
-        git(url: 'https://github.com/gmstcl/demo-apps', branch: 'backend', credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f')
+        git(url: 'https://github.com/gmstcl/demo-apps', branch: 'backend', credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130')
       }
     }
 
     stage('Test') { 
         steps {
-            sh 'docker run -d --name demo-backend -p 8081:8080 226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend:v1.1.0'
+            sh 'docker run -d --name demo-backend -p 8081:8080 ${AWS_REPOSITORY}:v$VERSION'
 
             script {
                 def container_id = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
@@ -55,7 +60,7 @@ rm -rf * rm -rf .*'''
     
     stage('Clone-helm-repo') {
       steps {
-        git(url: 'https://github.com/gmstcl/demo-charts', branch: 'main', credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f')
+        git(url: 'https://github.com/gmstcl/demo-charts', branch: 'main', credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130')
       }
     }
 
@@ -81,7 +86,7 @@ helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts
 git config user.name "gmstcl"
 git config user.email "as.gmstcl@gmail.com"
         '''
-        withCredentials(bindings: [usernamePassword(credentialsId: '06647ebb-e150-48d6-9219-ae08346a4a2f', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
+        withCredentials(bindings: [usernamePassword(credentialsId: 'a9c1964d-6d52-4da5-9467-5da0c1daa130', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD')]) {
           sh '''
 git remote set-url origin https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/gmstcl/demo-charts.git
 echo $GIT_PASSWORD | gh auth login --with-token
@@ -114,24 +119,24 @@ rm -rf .*'''
       }
     }
 
-    stage('Staging-Deploy') {
-      steps {
-        sh '''#!/bin/bash
-aws eks update-kubeconfig --name skills-staging-cluster
-helm repo add demo-backend-charts https://gmstcl.github.io/demo-charts/
-helm repo update
-helm uninstall skills-backend -n skills 
-helm install skills-backend --set Values.version=green --set image.repository=226347592148.dkr.ecr.ap-northeast-2.amazonaws.com/demo-backend --set image.tag=v1.1.0 demo-backend-charts/backend-skills-repo -n skills
-sleep 20 
-kubectl get pods -n skills''' 
-        script {
-            def statusCode = sh(script: "kubectl exec deployment/backend-app -n skills -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
-            if (statusCode != "200") {
-              error "Health check failed with status code: ${statusCode}"
-        }
-        }
-      }
-    }
+    // stage('Staging-Deploy') {
+      // steps {
+        // sh '''#!/bin/bash
+// aws eks update-kubeconfig --name skills-staging-cluster
+// helm repo add demo-backend-charts https://gmstcl.github.io/demo-charts/
+// helm repo update
+// helm uninstall skills-backend -n skills 
+// helm install skills-backend --set Values.version=green --set image.repository=${AWS_ACCOUNT}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/demo-backend --set image.tag=v$VERSION demo-backend-charts/backend-skills-repo -n skills
+// sleep 20 
+// kubectl get pods -n skills''' 
+        // script {
+            // def statusCode = sh(script: "kubectl exec deployment/backend-app -n skills -- curl -s -o /dev/null -w '%{http_code}' localhost:8080/api/health", returnStdout: true).trim()
+            // if (statusCode != "200") {
+              // error "Health check failed with status code: ${statusCode}"
+        // }
+        // }
+      // }
+    // }
     stage('Approval') {
       steps {
         emailext mimeType: 'text/html',
