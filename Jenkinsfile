@@ -21,20 +21,24 @@ pipeline {
 
         stage('Build') {
             steps {
+                withEnv(["AWS_REPOSITORY=${env.BACKEND_AWS_REPOSITORY}"]) {
                 sh '''
                 chmod +x ./gradlew
                 ./gradlew build
                 docker build -t ${AWS_REPOSITORY}:v$VERSION .
                 '''
+                }
             }
         }
 
         stage('Post-Build') {
             steps {
+                withEnv(["AWS_REPOSITORY=${env.BACKEND_AWS_REPOSITORY}"]) {
                 sh '''
                 docker push ${AWS_REPOSITORY}:v$VERSION
                 rm -rf * .*
                 '''
+                }
             }
         }
 
@@ -46,6 +50,7 @@ pipeline {
 
         stage('Test') {
             steps {
+                withEnv(["AWS_REPOSITORY=${env.BACKEND_AWS_REPOSITORY}"]) {
                 sh 'docker run -d --name demo-backend -p 8081:8080 ${AWS_REPOSITORY}:v$VERSION'
 
                 script {
@@ -64,6 +69,7 @@ pipeline {
                 docker stop $CONTAINER_ID
                 docker rm $CONTAINER_ID
                 '''
+                }
             }
         }
 
