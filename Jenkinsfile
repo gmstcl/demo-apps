@@ -49,7 +49,7 @@ pipeline {
         stage('Test') {
             steps {
                 withEnv(["AWS_REPOSITORY=${env.FRONTEND_AWS_REPOSITORY}"]) {
-                sh 'docker run -d --name demo-backend -p 8081:8080 ${AWS_REPOSITORY}:v$VERSION'
+                sh 'docker run -d --name demo-backend -p 80:80 ${AWS_REPOSITORY}:v$VERSION'
 
                 script {
                     env.CONTAINER_ID = sh(script: 'docker ps -q -f name=demo-backend', returnStdout: true).trim()
