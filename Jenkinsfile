@@ -131,7 +131,7 @@ pipeline {
 
         stage('Approval') {
             steps {
-                emailext mimeType: 'text/html', subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName} - v${VERSION}", from: 'as.gmstcl@gmail.com', to: 'as.gmstcl@gmail.com', body: '''<a href="${BUILD_URL}input">Please check this approval request.</a><img src="https://image.fmkorea.com/files/attach/new3/20230629/14339012/770863625/5916893416/6f736479948b0c9424a6adaf9bab41d2.png" alt="Clid">'''
+                emailext mimeType: 'text/html', subject: "[Jenkins] Approval Request from ${currentBuild.fullDisplayName} - v${VERSION}", from: 'as.gmstcl@gmail.com', to: 'as.gmstcl@gmail.com', body: '''<a href="${BUILD_URL}input">Please check this approval request.</a>'''
                 script {
                     input id: 'userInput', message: 'Deploy to production?', submitterParameter: 'submitter', submitter: 'admin'
                 }
