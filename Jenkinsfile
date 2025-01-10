@@ -80,8 +80,8 @@ pipeline {
         stage('helm-Pre-Build') {
             steps {
                 sh '''
-                sed -i "s|version:.*|version: $VERSION|g" backend-skills-repo/Chart.yaml
-                sed -i "s|tag:.*|tag: backend-v$VERSION|g" backend-skills-repo/values.yaml
+                sed -i "s|version:.*|version: $VERSION|g" frontend-skills-repo/Chart.yaml
+                sed -i "s|tag:.*|tag: backend-v$VERSION|g" frontend-skills-repo/values.yaml
                 '''
             }
         }
@@ -89,7 +89,7 @@ pipeline {
         stage('helm-Build') {
             steps {
                 sh '''
-                helm package backend-skills-repo
+                helm package frontend-skills-repo
                 helm repo index . --merge index.yaml --url https://github.com/gmstcl/demo-charts/releases/download/v$VERSION/
                 '''
             }
@@ -115,9 +115,9 @@ pipeline {
                 isBackend=$(echo $NAME | grep backend | wc -l)
 
                 if [ $isBackend -eq 0 ] && [ $isFrontend -eq 1 ]; then
-                    gh release upload v$VERSION backend-skills-repo-$VERSION.tgz
+                    gh release upload v$VERSION frontend-skills-repo-$VERSION.tgz
                 elif [ $isBackend -eq 0 ] && [ $isFrontend -eq 0 ]; then
-                    gh release create v$VERSION backend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
+                    gh release create v$VERSION frontend-skills-repo-$VERSION.tgz -t v$VERSION --generate-notes
                 fi
                 '''
                 sh 'rm -rf *.tgz'
